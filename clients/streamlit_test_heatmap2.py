@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 # let's create two "spots" in the streamlit view for our charts
 status = st.empty()
 time_show=st.empty()
-test=st.empty()
+parts_record=st.empty()
 predVis = st.empty()
 partVis = st.empty()
 
@@ -86,7 +86,7 @@ for i in np.arange(0,101):
 	
 	#show current time
 	current_time=game.getGameTime().get('curtime')
-	time_show.write(current_time)
+	time_show.write('current time:    '+str(current_time))
 	
 
 	# set the default productivity
@@ -104,7 +104,7 @@ for i in np.arange(0,101):
 	# get the parts
 		
 	parthints_df = pd.DataFrame(game.getAllPartHints())
-	test.write(len(parthints_df))
+	parts_record.write("Part hint records: " + str(len(parthints_df)))
 	df_parts=parthints_df.drop_duplicates().pivot(index='id',columns='column', values='value').reset_index()
 	df_productivity=game.getRobotInfo().dropna(axis=0,subset=['Productivity'])
 	robots.loc[df_productivity.index,'Productivity']=df_productivity['Productivity']
