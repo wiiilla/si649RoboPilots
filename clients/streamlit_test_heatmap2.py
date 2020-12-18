@@ -18,6 +18,7 @@ partVis = st.empty()
 
 corr_text=st.empty()
 corrVis1 = st.empty()
+
 corrVis = st.empty()
 
 
@@ -85,8 +86,8 @@ for i in np.arange(0,101):
 		partVis.write(c2)
 	
 	#show current time
-	current_time=game.getGameTime().get('curtime')
-	time_show.write('current time:    '+str(current_time))
+	gametime=game.getGameTime().get('curtime')
+	time_show.write('current time:    '+str(gametime))
 	
 
 	# set the default productivity
@@ -94,13 +95,14 @@ for i in np.arange(0,101):
 	robots['Productivity']=-1000
 
 
-	
-	# if current_time >=50 and choose_part:
-	# 	game.setPartInterest(choose_part)
-	# 	lst=[i['column'] for i in hints['parts']]
-	# 	corr_text.write(",".join(lst)+str(choose_part))
-	# else:
-	# 	corr_text.write(str(current_time)+ str(choose_part))
+	# set part interest after 50 time units
+	if gametime:
+		if gametime >=50 and choose_part:
+			game.setPartInterest(choose_part)
+			corr_text.write('Now is the time to consider productivity')
+		else:
+			corr_text.write(str(gametime)+ str(choose_part))
+
 	# get the parts
 		
 	parthints_df = pd.DataFrame(game.getAllPartHints())
@@ -137,9 +139,17 @@ for i in np.arange(0,101):
 		df_corr2=df_corr.dropna().sort_values(by='corr')
 		# df_corr
 		try:
-			sns.set(font_scale=1)
-			fig, ax = plt.subplots(figsize=(3,4))
-			ax= sns.heatmap(df_corr1,annot=True)
+			# df = pd.DataFrame({'x': [1, 2, 3], 'y': [10, 30, 70]})
+			# sns.lineplot(x='x', y='y', data=df)
+			# st.pyplot()
+			# sns.set(font_scale=1)
+			fig, ax = plt.subplots(figsize=(5,7))
+			# plt.rcParams.update({'font.size': 4})
+			ax= sns.heatmap(df_corr1,annot=True,cmap='RdGy_r',vmin=-1, vmax=1)
+			
+			# fig.update_layout(height=800)
+			# st.plotly_chart(fig,height=800)
+			# st.plotly_chart(fig)
 			corrVis1.write(fig)
 		except:
 			pass
